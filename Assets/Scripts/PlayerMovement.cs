@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     private float yInput;
 
     private float lastDirection;
+
+    public HitManager hitManager;
 
     void Start()
     {
@@ -93,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidbody.velocity = new Vector2(rigidbody.velocity.x * drag, rigidbody.velocity.y);
         }
-
     }
 
     private void CheckGround()
@@ -102,5 +104,13 @@ public class PlayerMovement : MonoBehaviour
             Physics2D
                 .OverlapAreaAll(groundCollider.bounds.min, groundCollider.bounds.max, groundMask)
                 .Length > 0;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Collectable"))
+        {
+            hitManager.Hit();
+        }
     }
 }
